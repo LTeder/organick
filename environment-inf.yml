@@ -1,0 +1,14 @@
+name: organickinf
+channels:
+    - conda-forge
+dependencies:
+    - numpy
+    - libopencv
+    - opencv
+    - py-opencv
+    - tqdm
+    - pip
+    - pip:
+          - nvidia-pyindex
+          - nvidia-tensorrt
+          - onnxruntime-gpu

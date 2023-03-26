@@ -1,0 +1,24 @@
+name: organickdev
+channels:
+    - conda-forge
+    - fastai
+    - pytorch
+dependencies:
+    - fastai
+    - numpy
+    - matplotlib
+    - jupyterlab
+    - pytorch
+    - torchvision
+    - libopencv
+    - opencv
+    - py-opencv
+    - tqdm
+    - ipywidgets
+    - libpng
+    - jpeg
+    - pip
+    - pip:
+          - nvidia-pyindex
+          - nvidia-tensorrt
+          - onnxruntime-gpu
