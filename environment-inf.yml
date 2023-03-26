@@ -6,9 +6,9 @@ dependencies:
     - libopencv
     - opencv
     - py-opencv
-    - tqdm
     - pip
     - pip:
+          - Jetson.GPIO
           - nvidia-pyindex
           - nvidia-tensorrt
           - onnxruntime-gpu
