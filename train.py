@@ -7,20 +7,6 @@ data_base = Path(".").resolve()
 data_dir = data_base / "train_mini"
 data_json = data_base / "train_mini.json"
 
-# Probably only need Arthropoda from Animalia
-folders = [*data_dir.glob("*")]
-kingdoms = set()
-animalia = set()
-
-for folder in tqdm(folders):
-    if not folder.is_dir():
-        continue
-    names = folder.name.split("_")
-    kingdom, phylum = names[1:3]
-    kingdoms.add(kingdom)
-    if kingdom == "Animalia":
-        animalia.add(phylum)
-
 def get_annotes(fname):
     annot_dict = json.load(open(fname))
     id2images, id2cats = {}, collections.defaultdict(list)
@@ -53,21 +39,26 @@ dls = ImageDataLoaders.from_lists(data_base, imgs, labels, valid_pct=0.2,
                                    batch_tfms=aug_transforms(size=224))
 
 learn = vision_learner(dls, resnet18, metrics=error_rate)
+learn.load("40epochs")
+learn.freeze_to(-1)
 
-learn.fit_one_cycle(10, 2e-2)
+learn.fit_flat_cos(5, 1e-3)
 
-learn.save("10epochs")
+learn.save("45epochs")
 
-lr = learn.lr_find()
-print(lr)
+learn.freeze()
+lr = learn.lr_find()[0] * 2
+lr = min(lr, 1e-3)
+print(f"\nUsing a maximum learning rate of {lr}...")
 
-learn.fit_one_cycle(15, 1e-3)
+learn.fit_one_cycle(10, lr)
 
-learn.save("25epochs")
+learn.save("55epochs")
 
-lr = learn.lr_find()
-print(lr)
+lr = learn.lr_find()[0] * 2
+lr = min(lr, 1e-3)
+print(f"\nUsing a maximum learning rate of {lr}...")
 
 learn.fit_one_cycle(15, lr)
 
-learn.save("40epochs")
+learn.save("60epochs")
